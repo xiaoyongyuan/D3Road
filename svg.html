@@ -85,11 +85,11 @@
         }
         //绘制火灾探测器图标位置
         function drawFireAlarm(posionX,status){
-            let imgW = 25;
-			let imgH = 25;
-			let posionY = 280;
+            let imgW = 30;
+			let imgH = 30;
+			let posionY = 370;
 			let fire=svg.append("image")
-                .attr("xlink:href","fireAlert.png")
+                .attr("xlink:href","./imges/fireAlert.png")
                 .attr("width",imgW)
                 .attr("height",imgH)
                 .attr("x",posionX)
@@ -102,9 +102,9 @@
 		function drawtrafficLight(posionX,status){
             let imgW = 25;
 			let imgH = 25;
-			let posionY = 150;
+			let posionY = 160;
 			svg.append("image")
-                .attr("xlink:href","passgo.png")
+                .attr("xlink:href","./imges/passgo.png")
                 .attr("width",imgW)
                 .attr("height",imgH)
                 .attr("x",posionX)
@@ -113,21 +113,59 @@
 		function drawfan(posionX,status){
             let imgW = 50;
 			let imgH = 50;
-			let posionY =150;
+			let posionY =180;
 			svg.append("image")
-                .attr("xlink:href","fan.gif")
+                .attr("xlink:href","./imges/fan.gif")
                 .attr("width",imgW)
                 .attr("height",imgH)
                 .attr("x",posionX)
                 .attr("y",posionY+initY)
         }
-
+        function door(posionX,status){
+            let imgW = 36;
+            let imgH = 50;
+            let posionY =90;
+            svg.append("image")
+                .attr("xlink:href","./imges/door.png")
+                .attr("width",imgW)
+                .attr("height",imgH)
+                .attr("x",posionX)
+                .attr("y",posionY)
+        }
+        function lamp(posionX,status){
+            let imgW = 30;
+            let imgH = 30;
+            let posionY =370;
+            svg.append("image")
+                .attr("xlink:href","./imges/lamp.png")
+                .attr("width",imgW)
+                .attr("height",imgH)
+                .attr("x",posionX)
+                .attr("y",posionY)
+        }
+        function prohibit(posionX,status){
+            let imgW = 30;
+            let imgH = 30;
+            let posionY =260;
+            svg.append("image")
+                .attr("xlink:href","./imges/error.png")
+                .attr("width",imgW)
+                .attr("height",imgH)
+                .attr("x",posionX+30)
+                .attr("y",posionY)
+        }
         $(function () {
-            drawRoad(10,30);
+            drawRoad(10,38);
 			let fa_array = [100,200,300,400,500,600,700,800,900];
 			fa_array.forEach(drawFireAlarm);
+            let door_array = [100,200,300,400,500,600,700,800,900];
+            door_array.forEach(door);
+            let lamp_array = [100,200,300,400,500,600,700,800,900];
+            lamp_array.forEach(lamp);
 			let tL_array = [100,350,600,850];
 			tL_array.forEach(drawtrafficLight);
+            let prohibit_array = [100,350,600,850];
+            prohibit_array.forEach(prohibit);
             let fan_array = [250,500];
 			fan_array.forEach(drawfan);
         })

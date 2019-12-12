@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>svg</title>
+    <!-- <script src="d3.min.js"></script> -->
+    <script src="http://d3js.org/d3.v3.js"></script>
+    <script src="jquery-3.3.1.min.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .context {
+            width: 100%;
+            height: 100%;
+            background: #212741;
+        }
+
+        svg {
+            top: 0;
+            left: 0;
+            height: 100%;
+        }
+
+        .light {
+            animation: blink 1s linear infinite;
+        }
+
+        .demo-color {
+
+            background-color: red;
+        }
+
+        @keyframes blink {
+            0% {
+                opacity: 0.2;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+
+            100% {
+                opacity: 0.2;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="context">
+
+    </div>
+    <script>
+        let set = [];
+        let xnum = 0;//x值宽度
+        let bg1 = "#6D6D6D";//#6D6D6D 
+        let bg2 = "#B9BABC";  //  #B9BABC
+        let bg3 = "#444444"
+        let bg4 = '#fff'
+        let initY = 100;
+        var svg = d3.select(".context")
+            .append("svg")
+        function drawRoad(roadW, num) {//绘制隧道内单项路
+            if (roadW < 4) {
+                roadW = 4;//最小保证4个宽度
+            }
+            for (let rwidth = 1; rwidth <= roadW; rwidth++) {
+                xnum += 100;
+                let newData = parseInt(num)
+                if (newData % 2 != 0) {
+                    newData += 1
+                }
+
+                for (let i = 0; i < newData; i++) {
+                    if (i === parseInt(newData / 1.5) && rwidth % 2 !== 0) {
+                        set.push({
+                            x: xnum,
+                            y: initY + i * 10 + 10,
+                            color: bg2
+                        });
+                    } else if (i < parseInt(newData / 2.3) && i > parseInt(newData / 4.8)) {
+                        set.push({
+                            x: xnum,
+                            y: initY + i * 10 + 10,
+                            color: bg3
+                        });
+                    } else {
+                        set.push({
+                            x: xnum,
+                            y: initY + i * 10 + 10,
+                            color: (i === 0 || i === parseInt(newData / 2.3) || i === parseInt(newData / 4.8) || i === newData - 1) ? bg2 : bg1
+                        });
+                    }
+                }
+            }
+            let block_width = 150;
+            let block_height = 12;
+            svg.selectAll("rect").data(set).enter().append("rect")
+                .attr('width', block_width)
+                .attr('height', block_height)
+                .attr('x', function (d) { return d.x })
+                .attr('y', function (d) { return d.y })
+                .attr('fill', function (d) { return d.color });
+        }
+
+        function oneDoor(posionX, status) {
+            let imgW = 36;
+            let imgH = 120;
+            let i = parseInt(status / 4.8)
+            let posionY = initY + i * 10 - 45
+            svg.append("image")
+                .attr("xlink:href", "./imges/door.png")
+                .attr("width", imgW)
+                .attr("height", imgH)
+                .attr("x", posionX)  // 120 220 320 420 520 620 720 
+                .attr("y", posionY)
+        }
+
+        function twoDoor(posionX, status) {
+            let imgW = 36;
+            let imgH = 50;
+            let i = parseInt(status / 2.3)
+            let posionY = initY + i * 10 - 10
+            svg.append("image")
+                .attr("xlink:href", "./imges/door.png")
+                .attr("width", imgW)
+                .attr("height", imgH)
+                .attr("x", posionX + 50)
+                .attr("y", posionY)
+        }
+
+        function passaGeway(y) {
+            var vis = d3.select("svg")
+                .attr("width", 885)
+                .attr("height", 800)
+            // 控制管道的高度
+            const y1 = parseInt(y / 4.8) * 10
+            const y2 = parseInt(y / 2.3) * 10
+            // 控制管道的位置
+            const yTop = parseInt(y1 + 110)
+            const yBot = parseInt(y2 + 110)
+
+            const poly = [
+                { "x": 0, "y": yTop },
+                { "x": 50, "y": yBot },
+                { "x": 86, "y": yBot },
+                { "x": 36, "y": yTop }
+            ];
+
+            const polyList = []
+            let arr = []
+            for (let i = 0; i < 8; i++) {
+                arr = poly.map((item) => {
+                    return { "x": item.x += 100, "y": item.y }
+                })
+                polyList.push(arr)
+            }
+
+
+            vis.selectAll("polygon")
+                .data(polyList)
+                .enter().append("polygon")
+                .attr("points", function (d) {
+                    return d.map(function (d) { return [d.x, d.y].join(","); }).join(" ");
+                })
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 2)
+                .attr("opacity", 0.4)
+                .attr('fill', "#fff")
+        }
+        $(function () {
+            let x = 10
+            let y = 38
+            drawRoad(x, y);
+            passaGeway(y)
+            let first_door = [100, 200, 300, 400, 500, 600, 700, 800];
+            first_door.forEach((item) => {
+                oneDoor(item, y)
+            });
+            let last_door = [100, 200, 300, 400, 500, 600, 700, 800];
+            last_door.forEach((item => {
+                twoDoor(item, y)
+            }));
+        })
+    </script>
+</body>
+
+</html>
